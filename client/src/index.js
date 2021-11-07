@@ -9,10 +9,11 @@ import Games from "./routes/games";
 ReactDOM.render(
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="players" element={<Players />} />
-        <Route path="coaches" element={<Coaches />} />
-        <Route path="games" element={<Games />} />
+        <Route path="/" element={<App />}>
+          <Route path="players" element={<Players />} />
+          <Route path="coaches" element={<Coaches />} />
+          <Route path="games" element={<Games />} />
+        </Route>
       </Routes>
     </BrowserRouter>,
     document.getElementById('root')
