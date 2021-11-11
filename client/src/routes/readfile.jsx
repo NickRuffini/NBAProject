@@ -1,86 +1,115 @@
-import React, { useState } from 'react';
-import DataTable from 'react-data-table-component';
-import * as XLSX from 'xlsx';
+import React, { Component } from 'react';
+import '../App.css';
+import {OutTable, ExcelRenderer} from 'react-excel-renderer';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Col, Input, InputGroup, FormGroup, Label, Button, Fade, FormFeedback, Container, Card } from 'reactstrap';
 
-function ReadFile() {
-
-  const [columns, setColumns] = useState([]);
-  const [data, setData] = useState([]);
-
-  // process CSV data
-  const processData = dataString => {
-    const dataStringLines = dataString.split(/\r\n|\n/);
-    const headers = dataStringLines[0].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
- 
-    const list = [];
-    for (let i = 1; i < dataStringLines.length; i++) {
-      const row = dataStringLines[i].split(/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/);
-      if (headers && row.length === headers.length) {
-        const obj = {};
-        for (let j = 0; j < headers.length; j++) {
-          let d = row[j];
-          if (d.length > 0) {
-            if (d[0] === '"')
-              d = d.substring(1, d.length - 1);
-            if (d[d.length - 1] === '"')
-              d = d.substring(d.length - 2, 1);
-          }
-          if (headers[j]) {
-            obj[headers[j]] = d;
-          }
-        }
- 
-        // remove the blank rows
-        if (Object.values(obj).filter(x => x).length > 0) {
-          list.push(obj);
-        }
-      }
+class ReadFile extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      isOpen: false,
+      dataLoaded: false,
+      isFormInvalid: false,
+      rows: null,
+      cols: null
     }
-
-    // prepare columns list from headers
-    const columns = headers.map(c => ({
-      name: c,
-      selector: c,
-    }));
- 
-    setData(list);
-    setColumns(columns);
+    this.fileHandler = this.fileHandler.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.openFileBrowser = this.openFileBrowser.bind(this);
+    this.renderFile = this.renderFile.bind(this);
+    this.openNewPage = this.openNewPage.bind(this);
+    this.fileInput = React.createRef();
   }
 
-  // handle file upload
-  const handleFileUpload = e => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      /* Parse data */
-      const bstr = evt.target.result;
-      const wb = XLSX.read(bstr, { type: 'binary' });
-      /* Get first worksheet */
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      /* Convert array of arrays */
-      const data = XLSX.utils.sheet_to_csv(ws, { header: 1 });
-      processData(data);
-    };
-    reader.readAsBinaryString(file);
+  renderFile = (fileObj) => {
+      //just pass the fileObj as parameter
+      ExcelRenderer(fileObj, (err, resp) => {
+        if(err){
+          console.log(err);            
+        }
+        else{
+          this.setState({
+            dataLoaded: true,
+            cols: resp.cols,
+            rows: resp.rows
+          });
+        }
+      }); 
   }
 
-  return (
-    <div>
-      <h3>Read CSV file in React - <a href="https://www.cluemediator.com" target="_blank" rel="noopener noreferrer">Clue Mediator</a></h3>
-      <input
-        type="file"
-        accept=".csv,.xlsx,.xls"
-        onChange={handleFileUpload}
-      />
-      <DataTable
-        pagination
-        highlightOnHover
-        columns={columns}
-        data={data}
-      />
-    </div>
-  );
+  fileHandler = (event) => {    
+    if(event.target.files.length){
+      let fileObj = event.target.files[0];
+      let fileName = fileObj.name;
+
+      
+      //check for file extension and pass only if it is .xlsx and display error message otherwise
+      if(fileName.slice(fileName.lastIndexOf('.')+1) === "xlsx"){
+        this.setState({
+          uploadedFileName: fileName,
+          isFormInvalid: false
+        });
+        this.renderFile(fileObj)
+      }    
+      else{
+        this.setState({
+          isFormInvalid: true,
+          uploadedFileName: ""
+        })
+      }
+    }               
+  }
+
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen
+    });
+  }
+
+  openFileBrowser = () => {
+    this.fileInput.current.click();
+  }
+
+  openNewPage = (chosenItem) => {
+    const url = chosenItem === "github" ? "https://github.com/ashishd751/react-excel-renderer" : "https://medium.com/@ashishd751/render-and-display-excel-sheets-on-webpage-using-react-js-af785a5db6a7";
+    window.open(url, '_blank');
+  }
+
+  render() {
+    return (
+      <div>
+        <Container>
+        <form>
+          <FormGroup row>
+            <Label for="exampleFile" xs={6} sm={4} lg={2} size="lg">Upload</Label>          
+            <Col xs={4} sm={8} lg={10}>                                                     
+              <InputGroup>
+                  <Button color="info" style={{color: "white", zIndex: 0}} onClick={this.openFileBrowser.bind(this)}><i className="cui-file"></i> Browse&hellip;</Button>
+                  <input type="file" hidden onChange={this.fileHandler.bind(this)} ref={this.fileInput} onClick={(event)=> { event.target.value = null }} style={{"padding":"10px"}} />                                
+                <Input type="text" className="form-control" value={this.state.uploadedFileName} readOnly invalid={this.state.isFormInvalid} />                                              
+                <FormFeedback>    
+                  <Fade in={this.state.isFormInvalid} tag="h6" style={{fontStyle: "italic"}}>
+                    Please select a .xlsx file only !
+                  </Fade>                                                                
+                </FormFeedback>
+              </InputGroup>     
+            </Col>                                                   
+          </FormGroup>   
+        </form>
+
+        {this.state.dataLoaded && 
+        <div>
+          <Card body outline color="secondary" className="restrict-card">
+            
+              <OutTable data={this.state.rows} columns={this.state.cols} tableClassName="ExcelTable2007" tableHeaderRowClass="heading" />
+            
+          </Card>  
+        </div>}
+        </Container>
+      </div>
+    );
+  }
 }
 
 export default ReadFile;
