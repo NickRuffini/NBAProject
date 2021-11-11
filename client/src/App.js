@@ -13,7 +13,9 @@ function App() {
         >
           <Link to="/players">Players</Link> |{" "}
           <Link to="/coaches">Coaches</Link> |{" "}
-          <Link to="/games">Games</Link>
+          <Link to="/games">Games</Link> |{" "}
+          <Link to="/teams">Teams</Link> |{" "}
+          <Link to="/readfile">Read File</Link>
         </nav>
         <Outlet/>
     </div>
