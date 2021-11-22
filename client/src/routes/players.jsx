@@ -19,7 +19,10 @@ export default function Players() {
     const[playerAPG, setPlayerAPG] = useState('')
 
     const submitPlayer = () => {
-      Axios.post('http://localhost:3001/')
+      Axios.post('http://localhost:3001/api/insert', {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
+                  PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
+                    alert('successful insert!');
+                  })
     }
 
     return (
@@ -33,13 +36,13 @@ export default function Players() {
             }}/>
           </Grid>
           <Grid item xs={1}>
-            <Dropdown options={teamOptions} value={teamOptions[0]} placeholder="Select an option" onChange={(e)=>{
-              setPlayerTeamName(e.target.value)
+            <Dropdown options={teamOptions} placeholder="Team" onChange={(e)=>{
+              setPlayerTeamName(e.value)
             }}/>
           </Grid>
           <Grid item xs={1}>
-            <Dropdown options={positionOptions} value={positionOptions[0]} placeholder="Select an option" onChange={(e)=>{
-              setPlayerPosition(e.target.value)
+            <Dropdown options={positionOptions} placeholder="Position" onChange={(e)=>{
+              setPlayerPosition(e.value)
             }}/>
           </Grid>
           <Grid item xs={2}>
