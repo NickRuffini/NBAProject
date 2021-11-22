@@ -18,6 +18,14 @@ export default function Players() {
     const[playerRPG, setPlayerRPG] = useState('')
     const[playerAPG, setPlayerAPG] = useState('')
 
+    const[playerList, setPlayerList] = useState([])
+
+    useEffect(() => {
+      Axios.get('http://localhost:3001/api/get').then((response) => {
+        setPlayerList(response.data.recordset)
+      })
+    }, [])
+
     const submitPlayer = () => {
       Axios.post('http://localhost:3001/api/insert', {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
                   PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
@@ -67,6 +75,9 @@ export default function Players() {
             <button onClick={submitPlayer}>Add Player</button>
           </Grid>
         </Grid>
+        {playerList.map((val) => {
+            return <h1>{val.PlayerID} | {val.FullName}</h1>
+          })}
       </main>
     );
 }
