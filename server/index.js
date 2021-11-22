@@ -17,6 +17,31 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+app.get('/api/get', (req, res) => {
+    
+    const FullName = req.body.FullName
+    const TeamName = req.body.TeamName
+    const Position = req.body.Position
+    const PointsPerGame = req.body.PointsPerGame
+    const ReboundsPerGame = req.body.ReboundsPerGame
+    const AssistsPerGame = req.body.AssistsPerGame
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT * FROM dbo.Player";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert', (req, res) => {
     
     const FullName = req.body.FullName
