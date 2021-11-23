@@ -33,6 +33,10 @@ export default function Players() {
                   })
     }
 
+    const deletePlayer = (playerID) => {
+      Axios.delete(`http://localhost:3001/api/delete/${playerID}`)
+    }
+
     return (
       <main style={{ padding: "1rem 0" }}>
         <h2>Players</h2>
@@ -79,20 +83,23 @@ export default function Players() {
               <Grid item xs={2} className='tableHeader'>
                 <h1>ID</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
+              <Grid item xs={3} className='tableHeader'>
                 <h1>Name</h1>
               </Grid>
               <Grid item xs={2} className='tableHeader'>
                 <h1>Position</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
+              <Grid item xs={1} className='tableHeader'>
                 <h1>PPG</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
+              <Grid item xs={1} className='tableHeader'>
                 <h1>RPG</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
+              <Grid item xs={1} className='tableHeader'>
                 <h1>APG</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>Other</h1>
               </Grid>
         </Grid>
         
@@ -102,20 +109,30 @@ export default function Players() {
               <Grid item xs={2} className='tableBox'>
                 <div>{val.PlayerID}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={3} className='tableBox'>
                 <div>{val.FullName}</div>
               </Grid>
               <Grid item xs={2} className='tableBox'>
                 <div>{val.Position}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={1} className='tableBox'>
                 <div>{val.PointsPerGame}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={1} className='tableBox'>
                 <div>{val.ReboundsPerGame}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={1} className='tableBox'>
                 <div>{val.AssistsPerGame}</div>
+              </Grid>
+              <Grid item xs={1} className='tableBox'>
+                <button onClick={() => {deletePlayer(val.PlayerID)}}>
+                  Delete
+                </button>
+              </Grid>
+              <Grid item xs={1} className='tableBox'>
+                <button>
+                  Update
+                </button>
               </Grid>
             </Grid>
           );

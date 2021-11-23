@@ -69,6 +69,24 @@ app.post('/api/insert', (req, res) => {
 
 })
 
+app.delete('/api/delete/:PlayerID', (req, res) => {
+    const playerID = req.params.PlayerID;
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlDelete = "DELETE FROM dbo.Player WHERE PlayerID = " + playerID;
+        //console.log(sqlInsert);
+        request.query(sqlDelete, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send('server test2');
+        });
+    });
+})
+
 app.listen(3001, () => {
     console.log('running on port 3001');
 })
