@@ -75,9 +75,51 @@ export default function Players() {
             <button onClick={submitPlayer}>Add Player</button>
           </Grid>
         </Grid>
+        <Grid container spacing={0} alignItems="center" justifyContent="center">
+              <Grid item xs={2} className='tableHeader'>
+                <h1>ID</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>Name</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>Position</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>PPG</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>RPG</h1>
+              </Grid>
+              <Grid item xs={2} className='tableHeader'>
+                <h1>APG</h1>
+              </Grid>
+        </Grid>
+        
         {playerList.map((val) => {
-            return <h1>{val.PlayerID} | {val.FullName}</h1>
-          })}
+          return (
+            <Grid container spacing={0} alignItems="center" justifyContent="center">
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.PlayerID}</div>
+              </Grid>
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.FullName}</div>
+              </Grid>
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.Position}</div>
+              </Grid>
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.PointsPerGame}</div>
+              </Grid>
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.ReboundsPerGame}</div>
+              </Grid>
+              <Grid item xs={2} className='tableBox'>
+                <div>{val.AssistsPerGame}</div>
+              </Grid>
+            </Grid>
+          );
+        })}
       </main>
     );
 }
