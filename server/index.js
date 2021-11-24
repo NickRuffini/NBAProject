@@ -42,6 +42,24 @@ app.get('/api/get/players', (req, res) => {
 
 })
 
+app.get('/api/get/coaches', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT * FROM dbo.Coach WHERE IsRemoved = 'No'";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName
@@ -59,6 +77,33 @@ app.post('/api/insert/players', (req, res) => {
         const sqlInsert = "INSERT INTO dbo.Player (FullName, TeamName, Position, PointsPerGame, ReboundsPerGame, AssistsPerGame) VALUES ('"
                             + FullName + "', '" + TeamName + "', '" + Position + "', " + PointsPerGame + ", " + ReboundsPerGame + ", " 
                             + AssistsPerGame + ")";
+        //console.log(sqlInsert);
+        request.query(sqlInsert, function (err, recordset) {
+            if (err) console.log('Please specify each player field.')
+            // send records as a response
+            res.send('server test2');
+        });
+    });
+
+})
+
+app.post('/api/insert/coaches', (req, res) => {
+    
+    const FirstName = req.body.FirstName
+    const LastName = req.body.LastName
+    const TeamName = req.body.TeamName
+    const Age = req.body.Age
+    const NumberOfChampionships = req.body.NumberOfChampionships
+    const CoachTypeId = req.body.CoachTypeId
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlInsert = "INSERT INTO dbo.Coach (FirstName, LastName, TeamName, Age, NumberOfChampionships, CoachTypeId) VALUES ('"
+                            + FirstName + "', '" + LastName + "', '" + TeamName + "', " + Age + ", " + NumberOfChampionships + ", " 
+                            + CoachTypeId + ")";
         //console.log(sqlInsert);
         request.query(sqlInsert, function (err, recordset) {
             if (err) console.log('Please specify each player field.')
