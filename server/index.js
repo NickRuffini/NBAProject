@@ -87,6 +87,33 @@ app.delete('/api/delete/:PlayerID', (req, res) => {
     });
 })
 
+app.put('/api/update/:PlayerID', (req, res) => {
+    const playerID = req.params.PlayerID;
+
+    const FullName = req.body.FullName
+    const TeamName = req.body.TeamName
+    const Position = req.body.Position
+    const PointsPerGame = req.body.PointsPerGame
+    const ReboundsPerGame = req.body.ReboundsPerGame
+    const AssistsPerGame = req.body.AssistsPerGame
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlUpdate = "UPDATE dbo.Player SET FullName = '" + FullName + "', TeamName = '" + TeamName + "', Position = '"
+                            + Position + "', PointsPerGame = " + PointsPerGame + ", ReboundsPerGame = " + ReboundsPerGame
+                            + ", AssistsPerGame = " + AssistsPerGame + " WHERE PlayerID = " + playerID;
+        //console.log(sqlInsert);
+        request.query(sqlUpdate, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send('server test2');
+        });
+    });
+})
+
 app.listen(3001, () => {
     console.log('running on port 3001');
 })

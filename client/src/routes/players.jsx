@@ -29,12 +29,19 @@ export default function Players() {
     const submitPlayer = () => {
       Axios.post('http://localhost:3001/api/insert', {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
                   PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
-                    alert('successful insert!');
+                    console.log('successful insert!');
                   })
     }
 
     const deletePlayer = (playerID) => {
       Axios.delete(`http://localhost:3001/api/delete/${playerID}`)
+    }
+
+    const updatePlayer = (playerID) => {
+      Axios.put(`http://localhost:3001/api/update/${playerID}`, {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
+                    PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
+                      console.log('successful update!');
+                    })
     }
 
     return (
@@ -86,8 +93,11 @@ export default function Players() {
               <Grid item xs={3} className='tableHeader'>
                 <h1>Name</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
-                <h1>Position</h1>
+              <Grid item xs={1} className='tableHeader'>
+                <h1>Team</h1>
+              </Grid>
+              <Grid item xs={1} className='tableHeader'>
+                <h1>Pos</h1>
               </Grid>
               <Grid item xs={1} className='tableHeader'>
                 <h1>PPG</h1>
@@ -112,7 +122,10 @@ export default function Players() {
               <Grid item xs={3} className='tableBox'>
                 <div>{val.FullName}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={1} className='tableBox'>
+                <div>{val.TeamName}</div>
+              </Grid>
+              <Grid item xs={1} className='tableBox'>
                 <div>{val.Position}</div>
               </Grid>
               <Grid item xs={1} className='tableBox'>
@@ -130,7 +143,7 @@ export default function Players() {
                 </button>
               </Grid>
               <Grid item xs={1} className='tableBox'>
-                <button>
+                <button onClick={() => {updatePlayer(val.PlayerID)}}>
                   Update
                 </button>
               </Grid>
