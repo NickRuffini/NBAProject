@@ -31,7 +31,7 @@ app.get('/api/get/players', (req, res) => {
         // create Request object
         var request = new mssql.Request();
         // query to the database and get the records
-        const sqlSelect = "SELECT * FROM dbo.Player";
+        const sqlSelect = "SELECT * FROM dbo.Player WHERE IsRemoved = 'No'";
         //console.log(sqlInsert);
         request.query(sqlSelect, function (err, recordset) {
             if (err) console.log(err)
@@ -69,7 +69,8 @@ app.post('/api/insert/players', (req, res) => {
 
 })
 
-app.delete('/api/delete/players/:PlayerID', (req, res) => {
+// Delete player
+app.put('/api/delete/players/:PlayerID', (req, res) => {
     const playerID = req.params.PlayerID;
 
     mssql.connect(config, function (err) {
@@ -77,7 +78,7 @@ app.delete('/api/delete/players/:PlayerID', (req, res) => {
         // create Request object
         var request = new mssql.Request();
         // query to the database and get the records
-        const sqlDelete = "DELETE FROM dbo.Player WHERE PlayerID = " + playerID;
+        const sqlDelete = "UPDATE dbo.Player SET IsRemoved = 'Yes' WHERE PlayerID = " + playerID;
         //console.log(sqlInsert);
         request.query(sqlDelete, function (err, recordset) {
             if (err) console.log(err)

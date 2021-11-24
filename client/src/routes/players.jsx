@@ -34,7 +34,7 @@ export default function Players() {
     }
 
     const deletePlayer = (playerID) => {
-      Axios.delete(`http://localhost:3001/api/delete/players/${playerID}`)
+      Axios.put(`http://localhost:3001/api/delete/players/${playerID}`)
     }
 
     const updatePlayer = (playerID) => {
