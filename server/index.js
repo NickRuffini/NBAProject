@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.get('/api/get', (req, res) => {
+app.get('/api/get/players', (req, res) => {
     
     const FullName = req.body.FullName
     const TeamName = req.body.TeamName
@@ -42,7 +42,7 @@ app.get('/api/get', (req, res) => {
 
 })
 
-app.post('/api/insert', (req, res) => {
+app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName
     const TeamName = req.body.TeamName
@@ -69,7 +69,7 @@ app.post('/api/insert', (req, res) => {
 
 })
 
-app.delete('/api/delete/:PlayerID', (req, res) => {
+app.delete('/api/delete/players/:PlayerID', (req, res) => {
     const playerID = req.params.PlayerID;
 
     mssql.connect(config, function (err) {
@@ -87,7 +87,7 @@ app.delete('/api/delete/:PlayerID', (req, res) => {
     });
 })
 
-app.put('/api/update/:PlayerID', (req, res) => {
+app.put('/api/update/players/:PlayerID', (req, res) => {
     const playerID = req.params.PlayerID;
 
     const FullName = req.body.FullName

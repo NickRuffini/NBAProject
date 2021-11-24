@@ -21,24 +21,24 @@ export default function Players() {
     const[playerList, setPlayerList] = useState([])
 
     useEffect(() => {
-      Axios.get('http://localhost:3001/api/get').then((response) => {
+      Axios.get('http://localhost:3001/api/get/players').then((response) => {
         setPlayerList(response.data.recordset)
       })
     }, [])
 
     const submitPlayer = () => {
-      Axios.post('http://localhost:3001/api/insert', {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
+      Axios.post('http://localhost:3001/api/insert/players', {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
                   PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
                     console.log('successful insert!');
                   })
     }
 
     const deletePlayer = (playerID) => {
-      Axios.delete(`http://localhost:3001/api/delete/${playerID}`)
+      Axios.delete(`http://localhost:3001/api/delete/players/${playerID}`)
     }
 
     const updatePlayer = (playerID) => {
-      Axios.put(`http://localhost:3001/api/update/${playerID}`, {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
+      Axios.put(`http://localhost:3001/api/update/players/${playerID}`, {FullName: playerName, TeamName: playerTeamName, Position: playerPosition, 
                     PointsPerGame: playerPPG, ReboundsPerGame: playerRPG, AssistsPerGame: playerAPG}).then(() => {
                       console.log('successful update!');
                     })
