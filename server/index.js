@@ -133,6 +133,25 @@ app.put('/api/delete/players/:PlayerID', (req, res) => {
     });
 })
 
+// Delete coach
+app.put('/api/delete/coaches/:CoachId', (req, res) => {
+    const coachID = req.params.CoachId;
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlDelete = "UPDATE dbo.Coach SET IsRemoved = 'Yes' WHERE CoachId = " + coachID;
+        //console.log(sqlInsert);
+        request.query(sqlDelete, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send('server test2');
+        });
+    });
+})
+
 app.put('/api/update/players/:PlayerID', (req, res) => {
     const playerID = req.params.PlayerID;
 
@@ -151,6 +170,33 @@ app.put('/api/update/players/:PlayerID', (req, res) => {
         const sqlUpdate = "UPDATE dbo.Player SET FullName = '" + FullName + "', TeamName = '" + TeamName + "', Position = '"
                             + Position + "', PointsPerGame = " + PointsPerGame + ", ReboundsPerGame = " + ReboundsPerGame
                             + ", AssistsPerGame = " + AssistsPerGame + " WHERE PlayerID = " + playerID;
+        //console.log(sqlInsert);
+        request.query(sqlUpdate, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send('server test2');
+        });
+    });
+})
+
+app.put('/api/update/coaches/:CoachId', (req, res) => {
+    const coachID = req.params.CoachId;
+
+    const FirstName = req.body.FirstName
+    const LastName = req.body.LastName
+    const TeamName = req.body.TeamName
+    const Age = req.body.Age
+    const NumberOfChampionships = req.body.NumberOfChampionships
+    const CoachTypeId = req.body.CoachTypeId
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlUpdate = "UPDATE dbo.Coach SET FirstName = '" + FirstName + "', LastName = '" + LastName + "', TeamName = '"
+                            + TeamName + "', Age = " + Age + ", NumberOfChampionships = " + NumberOfChampionships
+                            + ", CoachTypeId = " + CoachTypeId + " WHERE CoachId = " + coachID;
         //console.log(sqlInsert);
         request.query(sqlUpdate, function (err, recordset) {
             if (err) console.log(err)

@@ -130,12 +130,12 @@ export default function Coaches() {
                 <div>{val.NumberOfChampionships}</div>
               </Grid>
               <Grid item xs={1} className='tableBox'>
-                <button onClick={() => {deleteCoach(val.CoachID)}}>
+                <button onClick={() => {deleteCoach(val.CoachId)}}>
                   Delete
                 </button>
               </Grid>
               <Grid item xs={1} className='tableBox'>
-                <button onClick={() => {updateCoach(val.CoachID)}}>
+                <button onClick={() => {updateCoach(val.CoachId)}}>
                   Update
                 </button>
               </Grid>
