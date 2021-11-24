@@ -60,6 +60,24 @@ app.get('/api/get/coaches', (req, res) => {
 
 })
 
+app.get('/api/get/games', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT * FROM dbo.Game G INNER JOIN dbo.TeamGame TG ON TG.GameID = G.GameID";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName

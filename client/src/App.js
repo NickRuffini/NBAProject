@@ -11,6 +11,7 @@ function App() {
           paddingBottom: "1rem"
         }}
         >
+          <Link to="/home">Home</Link> |{" "}
           <Link to="/players">Players</Link> |{" "}
           <Link to="/coaches">Coaches</Link> |{" "}
           <Link to="/games">Games</Link>
