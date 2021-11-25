@@ -67,7 +67,7 @@ app.get('/api/get/games', (req, res) => {
         // create Request object
         var request = new mssql.Request();
         // query to the database and get the records
-        const sqlSelect = "SELECT * FROM dbo.Game G INNER JOIN dbo.TeamGame TG ON TG.GameID = G.GameID";
+        const sqlSelect = "SELECT G.GameID, G.[Date], HT.TeamName AS HomeTeam, [AT].TeamName AS AwayTeam, HT.Score FROM dbo.Game G JOIN dbo.TeamGame HT ON HT.GameID = G.GameID JOIN dbo.TeamGame [AT] ON [AT].GameID = G.GameID WHERE HT.TeamTypeID = 1 AND [AT].TeamTypeID = 2 ORDER BY G.GameID";
         //console.log(sqlInsert);
         request.query(sqlSelect, function (err, recordset) {
             if (err) console.log(err)
@@ -114,6 +114,8 @@ app.post('/api/insert/coaches', (req, res) => {
     const NumberOfChampionships = req.body.NumberOfChampionships
     const CoachTypeId = req.body.CoachTypeId
 
+    //Need to insert 1 row into Game table, 2 into TeamGame table now!
+
     mssql.connect(config, function (err) {
         if (err) console.log(err);
         // create Request object
@@ -128,6 +130,37 @@ app.post('/api/insert/coaches', (req, res) => {
             // send records as a response
             res.send('server test2');
         });
+    });
+
+})
+
+app.post('/api/insert/games', (req, res) => {
+    
+    const GameID = req.body.GameID
+    const GameIDNew = GameID + 1;
+
+    const Date = req.body.Date
+    const HomeTeam = req.body.HomeTeam
+    const AwayTeam = req.body.AwayTeam
+    const Score = req.body.Score
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlInsert1 = "INSERT INTO dbo.Game (Date) VALUES ('" + Date + "')";
+        const sqlInsert2 = "INSERT INTO dbo.TeamGame (TeamName, GameID, TeamTypeID, Score) VALUES ('" + HomeTeam + "', " +
+                            GameIDNew + ", 1, '" + Score + "'), ('" + AwayTeam + "', " +
+                            GameIDNew + ", 2, '" + Score + "')"
+        //console.log(sqlInsert);
+        request.query(sqlInsert1, function (err, recordset) {
+            if (err) console.log(err);
+        });
+        request.query(sqlInsert2, function (err, recordset) {
+            if (err) console.log(err);
+        });
+
     });
 
 })
