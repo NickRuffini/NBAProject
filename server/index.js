@@ -257,6 +257,38 @@ app.put('/api/update/coaches/:CoachId', (req, res) => {
     });
 })
 
+app.put('/api/update/games/:GameID', (req, res) => {
+    const gameID = req.params.GameID;
+
+    const Date = req.body.Date
+    const HomeTeam = req.body.HomeTeam
+    const AwayTeam = req.body.AwayTeam
+    const Score = req.body.Score
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlUpdate1 = "UPDATE dbo.Game SET Date = '" + Date + "' WHERE GameID = " + gameID;
+        const sqlUpdate2 = "UPDATE dbo.TeamGame SET TeamName = '" + HomeTeam + "', Score = '" + Score + 
+                            "' WHERE GameID = " + gameID + " AND TeamTypeID = 1";
+        const sqlUpdate3 = "UPDATE dbo.TeamGame SET TeamName = '" + AwayTeam + "', Score = '" + Score + 
+                            "' WHERE GameID = " + gameID + " AND TeamTypeID = 2";
+
+        //console.log(sqlInsert);
+        request.query(sqlUpdate1, function (err, recordset) {
+            if (err) console.log(err)
+        });
+        request.query(sqlUpdate2, function (err, recordset) {
+            if (err) console.log(err)
+        });
+        request.query(sqlUpdate3, function (err, recordset) {
+            if (err) console.log(err)
+        });
+    });
+})
+
 app.listen(3001, () => {
     console.log('running on port 3001');
 })

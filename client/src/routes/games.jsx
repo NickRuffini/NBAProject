@@ -35,7 +35,8 @@ export default function Games() {
 
     const updateGame = (gameID) => {
       const gameDateTime = gameDate + " " + gameTime
-      Axios.put(`http://localhost:3001/api/update/games/${gameID}`, {Date: gameDateTime}).then(() => {
+      Axios.put(`http://localhost:3001/api/update/games/${gameID}`, {Date: gameDateTime, HomeTeam: gameHomeTeam, 
+                    AwayTeam: gameAwayTeam, Score: gameScore}).then(() => {
                       console.log('successful update!');
                     })
     }
