@@ -4,9 +4,6 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import Axios from 'axios';
 
-const teamOptions = ['Atl','Bos','Bro','Cha','Chi','Cle','Dal','Den','Det','Gsw','Hou','Ind','Lac','Lal','Mem','Mia'
-                      ,'Mil','Min','Nop','Nyk','Okc','Orl','Phi','Pho','Por','Sac','Sas','Tor','Uta','Was'];
-
 const positionOptions = ['G', 'F', 'C', 'G-F', 'F-C'];
 
 export default function Players() {
@@ -20,9 +17,22 @@ export default function Players() {
 
     const[playerList, setPlayerList] = useState([])
 
+    const[teamOptions, setTeamOptions] = useState([])
+
+    const teamOptionsReduced = [];
+    for (let i = 0; i < teamOptions.length; i++) {
+      teamOptionsReduced[i] = teamOptions.at(i)['TeamName']
+    }
+
     useEffect(() => {
       Axios.get('http://localhost:3001/api/get/players').then((response) => {
         setPlayerList(response.data.recordset)
+      })
+    }, [])
+
+    useEffect(() => {
+      Axios.get('http://localhost:3001/api/get/teams').then((response) => {
+        setTeamOptions(response.data.recordset)
       })
     }, [])
 
@@ -55,7 +65,7 @@ export default function Players() {
             }}/>
           </Grid>
           <Grid item xs={1}>
-            <Dropdown options={teamOptions} placeholder="Team" onChange={(e)=>{
+            <Dropdown options={teamOptionsReduced} placeholder="Team" onChange={(e)=>{
               setPlayerTeamName(e.value)
             }}/>
           </Grid>

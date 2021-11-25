@@ -33,12 +33,12 @@ export default function Teams() {
                   })
     }
 
-    const updateTeam = (teamName) => {
-      Axios.put(`http://localhost:3001/api/update/teams/${teamName}}`, {TeamName: teamName, StadiumName: teamStadiumName, 
+    /*const updateTeam = (oldTeamName) => {
+      Axios.put(`http://localhost:3001/api/update/teams/${oldTeamName}`, {TeamName: teamName, StadiumName: teamStadiumName, 
                                                                         Wins: teamWins}).then(() => {
                       console.log('successful update!');
                     })
-    }
+    }*/
 
     return (
       <main style={{ padding: "1rem 0" }}>
@@ -72,11 +72,8 @@ export default function Teams() {
               <Grid item xs={4} className='tableHeader'>
                 <h1>Stadium</h1>
               </Grid>
-              <Grid item xs={2} className='tableHeader'>
+              <Grid item xs={4} className='tableHeader'>
                 <h1>Wins</h1>
-              </Grid>
-              <Grid item xs={2} className='tableHeader'>
-                <h1>Other</h1>
               </Grid>
         </Grid>
         
@@ -89,13 +86,8 @@ export default function Teams() {
               <Grid item xs={4} className='tableBox'>
                 <div>{val.StadiumName}</div>
               </Grid>
-              <Grid item xs={2} className='tableBox'>
+              <Grid item xs={4} className='tableBox'>
                 <div>{val.Wins}</div>
-              </Grid>
-              <Grid item xs={2} className='tableBox'>
-                <button onClick={() => {updateTeam(val.TeamName)}}>
-                  Update
-                </button>
               </Grid>
             </Grid>
           );

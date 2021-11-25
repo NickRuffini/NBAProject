@@ -18,13 +18,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/api/get/players', (req, res) => {
-    
-    const FullName = req.body.FullName
-    const TeamName = req.body.TeamName
-    const Position = req.body.Position
-    const PointsPerGame = req.body.PointsPerGame
-    const ReboundsPerGame = req.body.ReboundsPerGame
-    const AssistsPerGame = req.body.AssistsPerGame
 
     mssql.connect(config, function (err) {
         if (err) console.log(err);
@@ -327,6 +320,40 @@ app.put('/api/update/games/:GameID', (req, res) => {
         });
     });
 })
+
+/*app.put('/api/update/teams/:OldTeamName', (req, res) => {
+
+    const OldTeamName = req.params.OldTeamName;
+
+    const TeamName = req.body.TeamName
+    const StadiumName = req.body.StadiumName
+    const Wins = req.body.Wins
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlUpdate1 = "UPDATE dbo.Team SET TeamName = '" + TeamName + "', StadiumName = '" + StadiumName + "', Wins = "
+                            + Wins + "WHERE TeamName = '" + OldTeamName + "'";
+        const sqlUpdate2 = "UPDATE dbo.TeamGame SET TeamName = '" + TeamName + "' WHERE TeamName = '" + OldTeamName + "'";
+        const sqlUpdate3 = "UPDATE dbo.Player SET TeamName = '" + TeamName + "' WHERE TeamName = '" + OldTeamName + "'";
+        const sqlUpdate4 = "UPDATE dbo.Coach SET TeamName = '" + TeamName + "' WHERE TeamName = '" + OldTeamName + "'";
+        //console.log(sqlInsert);
+        request.query(sqlUpdate2, function (err, recordset) {
+            if (err) console.log(err)
+        });
+        request.query(sqlUpdate3, function (err, recordset) {
+            if (err) console.log(err)
+        });
+        request.query(sqlUpdate4, function (err, recordset) {
+            if (err) console.log(err)
+        });
+        request.query(sqlUpdate1, function (err, recordset) {
+            if (err) console.log(err)
+        });
+    });
+})*/
 
 app.listen(3001, () => {
     console.log('running on port 3001');
