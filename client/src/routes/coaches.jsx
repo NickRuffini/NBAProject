@@ -20,6 +20,8 @@ export default function Coaches() {
 
     const[coachList, setCoachList] = useState([])
 
+    //const[teamOptions, setTeamOptions] = useState([])
+
     useEffect(() => {
       Axios.get('http://localhost:3001/api/get/coaches').then((response) => {
         setCoachList(response.data.recordset)

@@ -4,7 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-        <h1> Basketball :) </h1>
+        <h1> Basketball League Manager </h1>
         <nav
         style={{
           borderBottom: "solid 1px",
@@ -14,7 +14,8 @@ function App() {
           <Link to="/home">Home</Link> |{" "}
           <Link to="/players">Players</Link> |{" "}
           <Link to="/coaches">Coaches</Link> |{" "}
-          <Link to="/games">Games</Link>
+          <Link to="/games">Games</Link> |{" "}
+          <Link to="/teams">Teams</Link>
         </nav>
         <Outlet/>
     </div>

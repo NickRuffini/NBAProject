@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const config = {
     user: 'ruffini',
-    password: 'ManaphyIsC00l1234!',
+    password: 'Seel$295',
     server: 'mssql.cs.ksu.edu',
     database: 'cis560_fall21_team21',
     synchronize: true,
@@ -78,6 +78,24 @@ app.get('/api/get/games', (req, res) => {
 
 })
 
+app.get('/api/get/teams', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT * FROM dbo.Team";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName
@@ -113,8 +131,6 @@ app.post('/api/insert/coaches', (req, res) => {
     const Age = req.body.Age
     const NumberOfChampionships = req.body.NumberOfChampionships
     const CoachTypeId = req.body.CoachTypeId
-
-    //Need to insert 1 row into Game table, 2 into TeamGame table now!
 
     mssql.connect(config, function (err) {
         if (err) console.log(err);
@@ -161,6 +177,29 @@ app.post('/api/insert/games', (req, res) => {
             if (err) console.log(err);
         });
 
+    });
+
+})
+
+app.post('/api/insert/teams', (req, res) => {
+    
+    const TeamName = req.body.TeamName
+    const StadiumName = req.body.StadiumName
+    const Wins = req.body.Wins
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlInsert = "INSERT INTO dbo.Team (TeamName, StadiumName, Wins) VALUES ('"
+                            + TeamName + "', '" + StadiumName + "', " + Wins + ")";
+        //console.log(sqlInsert);
+        request.query(sqlInsert, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send('server test2');
+        });
     });
 
 })

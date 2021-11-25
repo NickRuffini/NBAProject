@@ -6,6 +6,7 @@ import Players from "./routes/players";
 import Coaches from "./routes/coaches";
 import Games from "./routes/games";
 import Home from "./routes/home";
+import Team from "./routes/teams";
 
 ReactDOM.render(
     <BrowserRouter>
@@ -15,6 +16,7 @@ ReactDOM.render(
           <Route path="coaches" element={<Coaches />} />
           <Route path="games" element={<Games />} />
           <Route path="home" element={<Home />} />
+          <Route path="teams" element={<Team />} />
         </Route>
       </Routes>
     </BrowserRouter>,
