@@ -143,6 +143,42 @@ app.get('/api/get/report3', (req, res) => {
 
 })
 
+app.get('/api/get/reportAvg', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT (SUM(P.PointsPerGame) / COUNT(P.PlayerID)) AS AveragePoints FROM dbo.Player P";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
+app.get('/api/get/report4', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT C.FirstName + ' ' + C.LastName AS Coach, C.NumberOfChampionships, C.TeamName, T.Wins, (.75 * T.Wins + .25 * C.NumberOfChampionships) AS [2021ChanceToMakePlayoffs] FROM dbo.Coach C JOIN dbo.Team T ON T.TeamName = C.TeamName WHERE C.CoachTypeId = 1 AND C.IsRemoved = 'No' ORDER BY [2021ChanceToMakePlayoffs] DESC;";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName

@@ -12,14 +12,17 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement
 } from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+import { Bar, Line, Doughnut } from 'react-chartjs-2';
 
 export default function Home() {
 
     const[report1Data, setReport1Data] = useState([])
     const[report2Data, setReport2Data] = useState([])
     const[report3Data, setReport3Data] = useState([])
+    const[reportAvgData, setReportAvgData] = useState([])
+    const[report4Data, setReport4Data] = useState([])
 
 
     ChartJS.register(
@@ -28,6 +31,7 @@ export default function Home() {
       PointElement,
       LineElement,
       BarElement,
+      ArcElement,
       Title,
       Tooltip,
       Legend
@@ -95,6 +99,38 @@ export default function Home() {
       }]
     }
 
+    const report4ReducedNames = [];
+    for (let i = 0; i < report4Data.length; i++) {
+      report4ReducedNames[i] = report4Data.at(i)['TeamName'] 
+    }
+
+    const report4ReducedChance = [];
+    for (let i = 0; i < report4Data.length; i++) {
+      report4ReducedChance[i] = report4Data.at(i)['2021ChanceToMakePlayoffs']
+    }
+
+    var rgbList = []
+    for(var j = 0; j < 20; j++) {
+      var rgb = [];
+      for(var i = 0; i < 3; i++) {
+        rgb.push(Math.floor(Math.random() * 255));
+      }
+      rgbList[j] = "rgba(" + rgb[0] + ", " + rgb[1] + ", " + rgb[2] + ", 0.2)"
+    }
+
+    const report4Chart = {
+      labels: report4ReducedNames,
+      datasets: [
+        {
+          label: '% Chance to Make Playoffs',
+          data: report4ReducedChance,
+          backgroundColor: rgbList,
+          borderColor: rgbList,
+          borderWidth: 1,
+        },
+      ],
+    };
+
     useEffect(() => {
       Axios.get('http://localhost:3001/api/get/report1').then((response) => {
         setReport1Data(response.data.recordset)
@@ -110,6 +146,18 @@ export default function Home() {
     useEffect(() => {
       Axios.get('http://localhost:3001/api/get/report3').then((response) => {
         setReport3Data(response.data.recordset)
+      })
+    }, [])
+
+    useEffect(() => {
+      Axios.get('http://localhost:3001/api/get/reportAvg').then((response) => {
+        setReportAvgData(response.data.recordset)
+      })
+    }, [])
+
+    useEffect(() => {
+      Axios.get('http://localhost:3001/api/get/report4').then((response) => {
+        setReport4Data(response.data.recordset)
       })
     }, [])
 
@@ -149,6 +197,28 @@ export default function Home() {
           <Grid item xs={12}>
             <div className='chart'>
               <Line data={report3Chart} options={options3}/>
+            </div>
+          </Grid>
+          <Grid item xs={6}>
+            <div className='text'>
+              {reportAvgData.map((val) => {
+                return (
+                  <Grid container spacing={0} alignItems="center" justifyContent="center">
+                    <Grid item xs={6} className='tableHeader2'>
+                      <div>League Average PPG: </div>
+                    </Grid>
+                    <Grid item xs={6} className='tableHeader2'>
+                      <div>{val.AveragePoints.toFixed(2)}</div>
+                    </Grid>
+                  </Grid>
+                );
+              })}
+            </div>
+          </Grid>
+          <Grid item xs={10}>
+            <h1 className='tableHeader2'>Chance to Make Playoffs:</h1>
+            <div className='chart'>
+              <Doughnut data={report4Chart}/>
             </div>
           </Grid>
         </Grid>
