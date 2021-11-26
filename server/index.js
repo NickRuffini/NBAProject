@@ -89,6 +89,60 @@ app.get('/api/get/teams', (req, res) => {
 
 })
 
+app.get('/api/get/report1', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT P.FullName, ((.45 * P.PointsPerGame) + (.30 * P.ReboundsPerGame) + (.25 * P.AssistsPerGame)) AS PlayerEfficiencyRating FROM dbo.Player P ORDER BY PlayerEfficiencyRating DESC OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY;";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
+app.get('/api/get/report2', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "DECLARE @Page INT = 1, @ResultSize INT = 10; SELECT P.FullName, P.PointsPerGame FROM dbo.Player P GROUP BY P.Position, P.FullName, P.PointsPerGame ORDER BY P.PointsPerGame DESC OFFSET (@Page - 1) * @ResultSize ROWS FETCH NEXT @ResultSize ROWS ONLY;";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
+app.get('/api/get/report3', (req, res) => {
+
+    mssql.connect(config, function (err) {
+        if (err) console.log(err);
+        // create Request object
+        var request = new mssql.Request();
+        // query to the database and get the records
+        const sqlSelect = "SELECT P.FullName, P.Position, P.PointsPerGame, (ROUND((P.PointsPerGame / 8.44110091743119), 2) - 1) * 100 AS PercentageAboveLeagueAverage FROM dbo.Player P WHERE P.PointsPerGame > (SELECT (SUM(P.PointsPerGame) / COUNT(P.PlayerID)) AS AveragePoints FROM dbo.Player P) GROUP BY P.FullName, P.Position, P.PointsPerGame ORDER BY P.PointsPerGame DESC, PercentageAboveLeagueAverage DESC;";
+        //console.log(sqlInsert);
+        request.query(sqlSelect, function (err, recordset) {
+            if (err) console.log(err)
+            // send records as a response
+            res.send(recordset);
+        });
+    });
+
+})
+
 app.post('/api/insert/players', (req, res) => {
     
     const FullName = req.body.FullName
