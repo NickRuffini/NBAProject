@@ -18,3 +18,5 @@ These were created using the chart.js library, which ended up really sprucing ev
 
 For the related SQL and other Data files necessary for submission, we stored them in the "Data" folder in our project, which can be found on the same level as our Client and 
 Server folders.
+
+For more detailed usage of these SQL queries in the code, refer to the index.js file in the Client folder.
